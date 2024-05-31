@@ -55,6 +55,7 @@ ROOT_URLCONF = 'core.urls'
 
 DIRS = os.path.join(BASE_DIR, "HTML")
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

@@ -1,16 +1,50 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.contrib.auth import login,logout,authenticate
 from .models import *
 
 def HomePage(request):
-    return render(request,"index.html")
+    if str(request.user)=='AnonymousUser':
+        client="Gost"
+        email=""
+    else:
+        client=request.user
+        email=request.user.email
+    data=[{"img":"iphone5.jpg","text":"Apple iPhone 15 Pro (128 GB) - Blue Titanium : Amazon.co.uk: Everything Else"}]
+    return render(request,"index.html",{"client":client,"email":email,"data":data})
 
-def ClientPage(request):
-    data=Member.objects.all()
-    return render(request,"client.html",{"data1":data})
 
 def LoginPage(request):
+    if request.method=="POST":
+        if 'login' in request.POST:
+            email=request.POST.get("e")
+            password=request.POST.get("p")
+            
+            a=authenticate(username=email,password=password)
+            print(a)
+            print("True")
+            if a is not None:
+                login(request,a)
+                return redirect("/")
+            else:
+                return redirect("/login/")
+        if 'signin' in request.POST:
+            username=request.POST.get("un")
+            email=request.POST.get("e")
+            password1=request.POST.get("p1")
+            password2=request.POST.get("p2")
+            if password1==password2:
+                a=User.objects.create_user(username,email,password1)
+                login(request,a)
+                return redirect("/")
+            else:
+                return redirect("/signin/")
     return render(request,"login.html")
+
+def LogoutPage(request):
+    logout(request)
+    return redirect("/")
 
 def SigninPage(request):
     return render(request,"signin.html")

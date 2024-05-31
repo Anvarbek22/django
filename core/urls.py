@@ -5,7 +5,7 @@ from main.views import*
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomePage),
-    path('client/', ClientPage),
+    path('logout/', LogoutPage),
     path('login/', LoginPage),
     path('login/add/', SigninPage),
     path('mail/search/<str:cmail>/<str:password>', MailPage),
